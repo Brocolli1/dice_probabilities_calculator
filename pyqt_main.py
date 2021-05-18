@@ -89,10 +89,10 @@ class PyCalcUi(QMainWindow):
         labelsLayout = QVBoxLayout()
 
         labels = {
-            "ściany": (0, 0),
+            "liczba ścian": (0, 0),
             "kości": (0, 1),
-            "sukces": (0, 2),
-            "liczba": (0, 3),
+            "próg sukcesu": (0, 2),
+            "wymagana liczba sukcesów": (0, 3),
             "modyfikator": (0, 4),
         }
 
@@ -106,7 +106,7 @@ class PyCalcUi(QMainWindow):
             labelsLayout.addWidget(self.names[lblText])
             labelsLayout.addWidget(self.labels[lblText])
             
-            if lblText == "liczba":
+            if lblText == "wymagana liczba sukcesów":
                 self.check = QCheckBox()
                 labelsLayout.addWidget(self.check)
 
@@ -207,10 +207,10 @@ class PyCalcUi(QMainWindow):
 
     def changeStep(self, chain):
         index = self.cb.currentIndex()
-        self.labels["ściany"].setText(str(chain.steps[index].sides)) 
+        self.labels["liczba ścian"].setText(str(chain.steps[index].sides)) 
         self.labels["kości"].setText(str(chain.steps[index].amount_of_dice)) 
-        self.labels["sukces"].setText(str(chain.steps[index].success)) 
-        self.labels["liczba"].setText(str(chain.steps[index].needed_successes)) 
+        self.labels["próg sukcesu"].setText(str(chain.steps[index].success)) 
+        self.labels["wymagana liczba sukcesów"].setText(str(chain.steps[index].needed_successes)) 
         self.labels["modyfikator"].setText(str(chain.steps[index].modifier)) 
 
         self.check.setCheckState(chain.steps[index].success_required  )
@@ -223,13 +223,13 @@ class PyCalcUi(QMainWindow):
         chain.steps[self.cb.currentIndex()].amount_of_dice = int(self.labels["kości"].text())
 
     def updateSides(self, chain):
-        chain.steps[self.cb.currentIndex()].sides = int(self.labels["ściany"].text())
+        chain.steps[self.cb.currentIndex()].sides = int(self.labels["liczba ścian"].text())
 
     def updateSuccess(self, chain):
-        chain.steps[self.cb.currentIndex()].success = int(self.labels["sukces"].text())
+        chain.steps[self.cb.currentIndex()].success = int(self.labels["próg sukcesu"].text())
 
     def updateNeededSuccesses(self, chain):
-        chain.steps[self.cb.currentIndex()].needed_successes = int(self.labels["liczba"].text())
+        chain.steps[self.cb.currentIndex()].needed_successes = int(self.labels["wymagana liczba sukcesów"].text())
 
     def updateModifier(self, chain):
         chain.steps[self.cb.currentIndex()].modifier = int(self.labels["modyfikator"].text())
@@ -275,9 +275,9 @@ class PyCalcCtrl:
         self._view.buttons["rzuć"].clicked.connect(partial(self._view.showRollResult, self.chain))
         self._view.cb.currentIndexChanged.connect(partial(self._view.changeStep, self.chain))
         self._view.labels["kości"].textChanged.connect(partial(self._view.updateDice, self.chain))
-        self._view.labels["ściany"].textChanged.connect(partial(self._view.updateSides, self.chain))
-        self._view.labels["sukces"].textChanged.connect(partial(self._view.updateSuccess, self.chain))
-        self._view.labels["liczba"].textChanged.connect(partial(self._view.updateNeededSuccesses, self.chain))
+        self._view.labels["liczba ścian"].textChanged.connect(partial(self._view.updateSides, self.chain))
+        self._view.labels["próg sukcesu"].textChanged.connect(partial(self._view.updateSuccess, self.chain))
+        self._view.labels["wymagana liczba sukcesów"].textChanged.connect(partial(self._view.updateNeededSuccesses, self.chain))
         self._view.labels["modyfikator"].textChanged.connect(partial(self._view.updateModifier, self.chain))
         self._view.check.stateChanged.connect(partial(self._view.updateSuccessRequired, self.chain))
         

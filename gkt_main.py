@@ -71,10 +71,10 @@ class MyWindow(Gtk.Window):
         labelsLayout = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
         labels = {
-            "ściany": (0, 0),
+            "liczba ścian": (0, 0),
             "kości": (0, 1),
-            "sukces": (0, 2),
-            "liczba": (0, 3),
+            "próg sukcesu": (0, 2),
+            "wymagana liczba sukcesów": (0, 3),
             "modyfikator": (0, 4),
         }
 
@@ -89,7 +89,7 @@ class MyWindow(Gtk.Window):
             labelsLayout.add(self.names[lblText])
             labelsLayout.add(self.labels[lblText])
 
-            if lblText == "liczba":
+            if lblText == "wymagana liczba sukcesów":
                 self.check = Gtk.CheckButton()
                 labelsLayout.add(self.check)
 
@@ -217,10 +217,10 @@ class MyWindow(Gtk.Window):
 
     def changeStep(self, source, chain):
         index = self.cb.get_active()
-        self.labels["ściany"].set_text(str(chain.steps[index].sides)) 
+        self.labels["liczba ścian"].set_text(str(chain.steps[index].sides)) 
         self.labels["kości"].set_text(str(chain.steps[index].amount_of_dice)) 
-        self.labels["sukces"].set_text(str(chain.steps[index].success)) 
-        self.labels["liczba"].set_text(str(chain.steps[index].needed_successes)) 
+        self.labels["próg sukcesu"].set_text(str(chain.steps[index].success)) 
+        self.labels["wymagana liczba sukcesów"].set_text(str(chain.steps[index].needed_successes)) 
         self.labels["modyfikator"].set_text(str(chain.steps[index].modifier)) 
 
         self.x_input.set_text(str((chain.steps[index].dice_for_reroll)))
@@ -237,15 +237,15 @@ class MyWindow(Gtk.Window):
 
     def updateSides(self, source, event ,chain):
         numOnly(source)
-        chain.steps[self.cb.get_active()].sides = int(self.labels["ściany"].get_text())
+        chain.steps[self.cb.get_active()].sides = int(self.labels["liczba ścian"].get_text())
 
     def updateSuccess(self, source, event ,chain):
         numOnly(source)
-        chain.steps[self.cb.get_active()].success = int(self.labels["sukces"].get_text())
+        chain.steps[self.cb.get_active()].success = int(self.labels["próg sukcesu"].get_text())
 
     def updateNeededSuccesses(self, source, event ,chain):
         numOnly(source)
-        chain.steps[self.cb.get_active()].needed_successes = int(self.labels["liczba"].get_text())
+        chain.steps[self.cb.get_active()].needed_successes = int(self.labels["wymagana liczba sukcesów"].get_text())
 
     def updateModifier(self, source, event ,chain):
         numOnly(source)
@@ -294,9 +294,9 @@ class PyCalcCtrl:
         self._view.buttons["rzuć"].connect("clicked",self._view.showRollResult, self.chain)
         self._view.cb.connect("changed", self._view.changeStep, self.chain)
         self._view.labels["kości"].connect("key-release-event", self._view.updateDice, self.chain)
-        self._view.labels["ściany"].connect("key-release-event", self._view.updateSides, self.chain)
-        self._view.labels["sukces"].connect("key-release-event",self._view.updateSuccess, self.chain)
-        self._view.labels["liczba"].connect("key-release-event",self._view.updateNeededSuccesses, self.chain)
+        self._view.labels["liczba ścian"].connect("key-release-event", self._view.updateSides, self.chain)
+        self._view.labels["próg sukcesu"].connect("key-release-event",self._view.updateSuccess, self.chain)
+        self._view.labels["wymagana liczba sukcesów"].connect("key-release-event",self._view.updateNeededSuccesses, self.chain)
         self._view.labels["modyfikator"].connect("key-release-event",self._view.updateModifier, self.chain)
         self._view.check.connect("clicked", self._view.updateSuccessRequired, self.chain)
         
